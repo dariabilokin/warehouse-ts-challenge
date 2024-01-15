@@ -14,7 +14,15 @@ async function main(): Promise<void> {
     )
     const [packageStatus, totalPrice, packageBuild, restock] =
       await buildPackage(orders[i], restockingThreshold)
-    restockList = new Map([...restockList.entries(), ...restock.entries()])
+    for (let entry of Array.from(restock.entries())) {
+      const productId = entry[0]
+      const amount = entry[1]
+      if (restockList.has(productId)) {
+        restockList.set(productId, restockList.get(productId)! + amount)
+      } else {
+        restockList.set(productId, amount)
+      }
+    }
 
     console.log('Package status: ', packageStatus)
     console.log(`Total price: ${totalPrice.toFixed(3)}`)

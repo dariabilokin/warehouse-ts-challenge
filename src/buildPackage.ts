@@ -80,8 +80,20 @@ export async function buildPackage(
         console.log(
           `Item with id: ${item} and name: ${product.name} added to package`
         )
-      } else if (Math.max(amount, restockingThreshold) > product.stock) {
-        console.log(`!________ It's time to restock Item with id: ${item} !`)
+        if (product.stock < restockingThreshold) {
+          console.log(
+            `!________ It's time to restock Item with id: ${item} ${product.stock}  ${amount} !`
+          )
+          // ! we also can add not amount but restocking threshold to restocking list
+          restock.set(
+            item,
+            restock.has(item) ? restock.get(item)! + amount : amount
+          )
+        }
+      } else if (restockingThreshold > product.stock) {
+        console.log(
+          `!________ It's time to restock Item with id: ${item}  ${product.stock}  ${amount}!`
+        )
         restock.set(
           item,
           restock.has(item) ? restock.get(item)! + amount : amount
@@ -89,7 +101,7 @@ export async function buildPackage(
         if (product.stock == 0) {
           packageStatus = 'incomplete'
           console.log(
-            `!-------- Item with id: ${item} out of stock. \n!-------- Package cannot be completed.`
+            `!-------- Item with id: ${item} out of stock.  ${product.stock}  ${amount}\n!-------- Package cannot be completed.`
           )
         }
       }
