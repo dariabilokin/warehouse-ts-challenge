@@ -81,29 +81,22 @@ export async function buildPackage(
           `Item with id: ${item} and name: ${product.name} added to package`
         )
         if (product.stock < restockingThreshold) {
-          console.log(
-            `!________ It's time to restock Item with id: ${item} ${product.stock}  ${amount} !`
-          )
+          console.log(`!________ It's time to restock Item with id: ${item}  !`)
           // ! we also can add not amount but restocking threshold to restocking list
           restock.set(
             item,
             restock.has(item) ? restock.get(item)! + amount : amount
           )
         }
-      } else if (restockingThreshold > product.stock) {
-        console.log(
-          `!________ It's time to restock Item with id: ${item}  ${product.stock}  ${amount}!`
-        )
+      } else {
         restock.set(
           item,
           restock.has(item) ? restock.get(item)! + amount : amount
         )
-        if (product.stock == 0) {
-          packageStatus = 'incomplete'
-          console.log(
-            `!-------- Item with id: ${item} out of stock.  ${product.stock}  ${amount}\n!-------- Package cannot be completed.`
-          )
-        }
+        packageStatus = 'incomplete'
+        console.log(
+          `!-------- Item with id: ${item} out of stock. We have: ${product.stock}, but we need: ${amount}\n!-------- Package cannot be completed.`
+        )
       }
     } else {
       console.log('!!!-------- Item not found --------!!!', item)
