@@ -41,7 +41,8 @@ export async function buildPackage(
 
   const articles = generatePackageList(order.articles)
   console.log('Articles to be packed:', articles)
-  // TODO : if any of articles is in the restock list, I should not continue. I can say right away that the package can't be completed .
+  // TODO : if any of articles is in the restock list, I should not continue. I can say right away that the package can't be completed.
+  // But it will work if we put it to restock list only when stock is 0. Or if we specify in restock list how much we have left.
   // for each order I want to fetch all products. Later we can just fetch it once in a main function and then mutate it.
   const [tools, heatPumps, installationMaterials] = await Promise.all([
     getProducts(ProductType.TOOLS),
