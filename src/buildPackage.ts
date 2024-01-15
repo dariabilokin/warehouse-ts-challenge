@@ -78,25 +78,24 @@ export async function buildPackage(
         product.stock -= amount
         await updateProduct(productType, item, product)
         console.log(
-          `Item with id: ${item} and name: ${product.name} added to package\n`
+          `Item with id: ${item} and name: ${product.name} added to package`
         )
       } else if (Math.max(amount, restockingThreshold) > product.stock) {
-        console.log(
-          `!-------- It's time to restock Item with id: ${item} --------!\n`
-        )
+        console.log(`!________ It's time to restock Item with id: ${item} !`)
         restock.set(
           item,
           restock.has(item) ? restock.get(item)! + amount : amount
         )
-        console.log('restock', restock)
-      } else {
-        packageStatus = 'incomplete'
-        console.log(`!-------- Item with id: ${item} out of stock --------!\n`)
+        if (product.stock == 0) {
+          packageStatus = 'incomplete'
+          console.log(
+            `!-------- Item with id: ${item} out of stock. \n!-------- Package cannot be completed.`
+          )
+        }
       }
     } else {
-      console.log('!-------- Item not found --------!\n', item)
+      console.log('!!!-------- Item not found --------!!!', item)
     }
   }
-  console.log('Total price: ', totalPrice)
   return [packageStatus, totalPrice, packageBuild, restock]
 }
