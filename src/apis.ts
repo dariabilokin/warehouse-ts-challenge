@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Product, Order, ProductType, PType } from './interfaces'
+import { Product, Order, PType } from './interfaces'
 const getOrders = async (): Promise<Order[]> => {
   const { data } = await axios.get<Order[]>('http://localhost:3000/orders')
   return data
@@ -25,7 +25,7 @@ const updateProduct = async (
   await axios
     .put(`http://localhost:3000/${type}/${productId}`, productData)
     .then(function (response) {
-      console.log('Update product status', response?.statusText)
+      console.log(`Update product ${productId} status`, response?.statusText)
     })
     .catch(function (error) {
       console.log(error)
